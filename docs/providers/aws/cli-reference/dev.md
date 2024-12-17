@@ -1,18 +1,18 @@
 <!--
-title: Serverless Framework - Console Dev Mode
+title: Serverless Framework Commands - Dev
 menuText: Serverless Console Dev Mode
-menuOrder: 12
+menuOrder: 1
 description: Launch a Serverless Console dev mode session in the terminal
 layout: Doc
 -->
 
 <!-- DOCS-SITE-LINK:START automatically generated  -->
 
-### [Read this on the main serverless docs site](https://www.serverless.com/framework/docs/guides/dev/)
+### [Read this on the main serverless docs site](https://www.serverless.com/framework/docs/providers/aws/cli-reference/dev/)
 
 <!-- DOCS-SITE-LINK:END -->
 
-# Serverless Console Dev Mode
+# Dev
 
 The `serverless dev` command will launch a [Serverless Console Dev Mode](https://www.serverless.com/console/docs/application-guide/dev-mode) session in your terminal.
 

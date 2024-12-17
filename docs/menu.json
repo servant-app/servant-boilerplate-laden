@@ -436,6 +436,7 @@
   "Serverless.yml Reference": "providers/aws/guide/serverless.yml",
   "CLI Reference": {
     "Overview": "providers/aws/cli-reference",
+    "dev": "providers/aws/cli-reference/dev",
     "config": "providers/aws/cli-reference/config",
     "config credentials": "providers/aws/cli-reference/config-credentials",
     "create": "providers/aws/cli-reference/create",
