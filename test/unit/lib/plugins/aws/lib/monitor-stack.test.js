@@ -685,6 +685,159 @@ describe('monitorStack', () => {
       });
     });
 
+    it('should exit if stack status is UPDATE_FAILED when using --verbose', () => {
+      awsPlugin.options.verbose = true;
+      const describeStackEventsStub = sinon.stub(awsPlugin.provider, 'request');
+      const cfDataMock = {
+        StackId: 'new-service-dev',
+      };
+      const deleteStartEvent = {
+        StackEvents: [
+          {
+            EventId: '1a2b3c4d',
+            StackName: 'new-service-dev',
+            LogicalResourceId: 'new-service-dev',
+            ResourceType: 'AWS::CloudFormation::Stack',
+            Timestamp: new Date(),
+            ResourceStatus: 'DELETE_IN_PROGRESS',
+          },
+        ],
+      };
+      const deleteItemEvent = {
+        StackEvents: [
+          {
+            EventId: '1e2f3g4h',
+            StackName: 'new-service-dev',
+            LogicalResourceId: 'mochaLambda',
+            ResourceType: 'AWS::Lambda::Function',
+            Timestamp: new Date(),
+            ResourceStatus: 'DELETE_IN_PROGRESS',
+          },
+        ],
+      };
+      const updateItemFailedEvent = {
+        StackEvents: [
+          {
+            EventId: '1i2j3k4l',
+            StackName: 'new-service-dev',
+            LogicalResourceId: 'mochaLambda',
+            ResourceType: 'AWS::Lambda::Function',
+            Timestamp: new Date(),
+            ResourceStatus: 'UPDATE_FAILED',
+            ResourceStatusReason: 'You are not authorized to perform this operation',
+          },
+        ],
+      };
+      const updateFailedEvent = {
+        StackEvents: [
+          {
+            EventId: '1m2n3o4p',
+            StackName: 'new-service-dev',
+            LogicalResourceId: 'new-service-dev',
+            ResourceType: 'AWS::CloudFormation::Stack',
+            Timestamp: new Date(),
+            ResourceStatus: 'UPDATE_FAILED',
+          },
+        ],
+      };
+
+      describeStackEventsStub.onCall(0).resolves(deleteStartEvent);
+      describeStackEventsStub.onCall(1).resolves(deleteItemEvent);
+      describeStackEventsStub.onCall(2).resolves(updateItemFailedEvent);
+      describeStackEventsStub.onCall(3).resolves(updateFailedEvent);
+
+      return awsPlugin.monitorStack('delete', cfDataMock, { frequency: 10 }).catch((e) => {
+        let errorMessage = 'An error occurred: ';
+        errorMessage += 'mochaLambda - You are not authorized to perform this operation.';
+        expect(e.name).to.be.equal('ServerlessError');
+        expect(e.message).to.be.equal(errorMessage);
+
+        expect(describeStackEventsStub.callCount).to.be.equal(4);
+        expect(
+          describeStackEventsStub.calledWithExactly('CloudFormation', 'describeStackEvents', {
+            StackName: cfDataMock.StackId,
+          })
+        ).to.be.equal(true);
+        awsPlugin.provider.request.restore();
+      });
+    });
+    it('should exit if stack status is CREATE_FAILED when using --verbose', () => {
+      awsPlugin.options.verbose = true;
+      const describeStackEventsStub = sinon.stub(awsPlugin.provider, 'request');
+      const cfDataMock = {
+        StackId: 'new-service-dev',
+      };
+      const deleteStartEvent = {
+        StackEvents: [
+          {
+            EventId: '1a2b3c4d',
+            StackName: 'new-service-dev',
+            LogicalResourceId: 'new-service-dev',
+            ResourceType: 'AWS::CloudFormation::Stack',
+            Timestamp: new Date(),
+            ResourceStatus: 'CREATE_IN_PROGRESS',
+          },
+        ],
+      };
+      const deleteItemEvent = {
+        StackEvents: [
+          {
+            EventId: '1e2f3g4h',
+            StackName: 'new-service-dev',
+            LogicalResourceId: 'mochaLambda',
+            ResourceType: 'AWS::Lambda::Function',
+            Timestamp: new Date(),
+            ResourceStatus: 'CREATE_IN_PROGRESS',
+          },
+        ],
+      };
+      const updateItemFailedEvent = {
+        StackEvents: [
+          {
+            EventId: '1i2j3k4l',
+            StackName: 'new-service-dev',
+            LogicalResourceId: 'mochaLambda',
+            ResourceType: 'AWS::Lambda::Function',
+            Timestamp: new Date(),
+            ResourceStatus: 'CREATE_FAILED',
+            ResourceStatusReason: 'You are not authorized to perform this operation',
+          },
+        ],
+      };
+      const updateFailedEvent = {
+        StackEvents: [
+          {
+            EventId: '1m2n3o4p',
+            StackName: 'new-service-dev',
+            LogicalResourceId: 'new-service-dev',
+            ResourceType: 'AWS::CloudFormation::Stack',
+            Timestamp: new Date(),
+            ResourceStatus: 'UPDATE_FAILED',
+          },
+        ],
+      };
+
+      describeStackEventsStub.onCall(0).resolves(deleteStartEvent);
+      describeStackEventsStub.onCall(1).resolves(deleteItemEvent);
+      describeStackEventsStub.onCall(2).resolves(updateItemFailedEvent);
+      describeStackEventsStub.onCall(3).resolves(updateFailedEvent);
+
+      return awsPlugin.monitorStack('create', cfDataMock, { frequency: 10 }).catch((e) => {
+        let errorMessage = 'An error occurred: ';
+        errorMessage += 'mochaLambda - You are not authorized to perform this operation.';
+        expect(e.name).to.be.equal('ServerlessError');
+        expect(e.message).to.be.equal(errorMessage);
+
+        expect(describeStackEventsStub.callCount).to.be.equal(4);
+        expect(
+          describeStackEventsStub.calledWithExactly('CloudFormation', 'describeStackEvents', {
+            StackName: cfDataMock.StackId,
+          })
+        ).to.be.equal(true);
+        awsPlugin.provider.request.restore();
+      });
+    });
+
     it(
       'should throw an error if stack status is DELETE_FAILED and should output all ' +
         'stack events information with the --verbose option',
