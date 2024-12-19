@@ -726,6 +726,12 @@ functions:
     maximumRetryAttempts: 1
     # Maximum event age in seconds when invoking asynchronously (between 60 and 21600)
     maximumEventAge: 7200
+    # Configuring Lambda advanced logging options
+    loggingConfig:
+      applicationLogLevel: DEBUG
+      logFormat: JSON
+      logGroup: helloLoggingLogGroup
+      systemLogLevel: DEBUG
 ```
 
 ## Lambda events

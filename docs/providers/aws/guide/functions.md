@@ -839,6 +839,21 @@ functions:
     ephemeralStorageSize: 1024
 ```
 
+## Logging Configuration
+
+[Configuring Lambda advanced logging options](https://docs.aws.amazon.com/lambda/latest/dg/monitoring-cloudwatchlogs.html#monitoring-cloudwatchlogs-advanced)
+
+```yml
+functions:
+  helloLogging:
+    handler: handler.handler
+    loggingConfig:
+      applicationLogLevel: DEBUG
+      logFormat: JSON
+      logGroup: helloLoggingLogGroup
+      systemLogLevel: DEBUG
+```
+
 ## Lambda Hashing Algorithm migration
 
 **Note** Below migration guide is intended to be used if you are already using `v3` version of the Framework and you have `provider.lambdaHashingVersion` property set to `20200924` in your configuration file. If you are still on v2 and want to upgrade to v3, please refer to [V3 Upgrade docs](../../../guides/upgrading-v3.md#lambda-hashing-algorithm).
