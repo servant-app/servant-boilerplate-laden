@@ -122,6 +122,7 @@ describe('test/unit/lib/plugins/aws/package/compile/events/schedule.test.js', ()
             method: METHOD_SCHEDULER,
             name: 'scheduler-scheduled-event',
             description: 'Scheduler Scheduled Event',
+            groupName: 'Scheduler Group Name',
             input: '{"key":"array"}',
           },
         },
@@ -217,6 +218,19 @@ describe('test/unit/lib/plugins/aws/package/compile/events/schedule.test.js', ()
       expect(scheduleCfResources[7].Properties.Description).to.be.undefined;
       expect(scheduleCfResources[8].Properties.Description).to.equal('Scheduler Scheduled Event');
       expect(scheduleCfResources[9].Properties.Description).to.be.undefined;
+    });
+
+    it('should respect the "groupName" variable', () => {
+      expect(scheduleCfResources[0].Properties.GroupName).to.be.undefined;
+      expect(scheduleCfResources[1].Properties.GroupName).to.be.undefined;
+      expect(scheduleCfResources[2].Properties.GroupName).to.be.undefined;
+      expect(scheduleCfResources[3].Properties.GroupName).to.be.undefined;
+      expect(scheduleCfResources[4].Properties.GroupName).to.be.undefined;
+      expect(scheduleCfResources[5].Properties.GroupName).to.be.undefined;
+      expect(scheduleCfResources[6].Properties.GroupName).to.be.undefined;
+      expect(scheduleCfResources[7].Properties.GroupName).to.be.undefined;
+      expect(scheduleCfResources[8].Properties.GroupName).to.be.equal('Scheduler Group Name');
+      expect(scheduleCfResources[9].Properties.GroupName).to.be.undefined;
     });
 
     it('should respect the "inputPath" variable', () => {
@@ -315,6 +329,22 @@ describe('test/unit/lib/plugins/aws/package/compile/events/schedule.test.js', ()
       ServerlessError,
       'You cannot specify a name when defining more than one rate expression'
     );
+  });
+
+  it('should throw when passing "groupName" to method:eventBus resources', async () => {
+    const events = [
+      {
+        schedule: {
+          rate: 'rate(15 minutes)',
+          method: METHOD_EVENT_BUS,
+          groupName: 'Group Name',
+        },
+      },
+    ];
+
+    await expect(run(events))
+      .to.be.eventually.rejectedWith(ServerlessError)
+      .and.have.property('code', 'SCHEDULE_PARAMETER_NOT_SUPPORTED');
   });
 
   it('should throw when passing "inputPath" to method:schedule resources', async () => {

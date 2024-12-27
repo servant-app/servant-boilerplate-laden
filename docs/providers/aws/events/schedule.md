@@ -116,3 +116,14 @@ functions:
             key1: value1
             key2: value2
 ```
+
+You can configure a scheduler group for the schedules with the property `groupName` which can be either the name of or a ref to an existing group. You can create the schedule group as a resource.
+
+```yaml
+resources:
+  Resources:
+    - SchedulerGroup:
+      Type: AWS::Scheduler::ScheduleGroup
+      Properties:
+        Name: ${self:service}-${sls:stage}
+```
