@@ -115,4 +115,5 @@ functions:
           input:
             key1: value1
             key2: value2
+          deadLetterTargetArn: !GetAtt DLQ.Arn
 ```
