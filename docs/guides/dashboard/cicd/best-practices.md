@@ -20,7 +20,13 @@ keywords:
 
 # Serverless CI/CD Best Practices
 
-Serverless Framework provides a lot of capabilities out of the box to help you manage and deploy
+Break down your serverless application so that each of followings have their own repository and deployment pipeline:
+
+* Ephemeral environment and all its associated ephemeral resources such as AWS Lambda etc. This ensures that they can be deployed and rolled-back at the same time making it easier to spin-up and discard the ephemeral environment.
+* Shared resources with long spin-up time e.g. AWS RDS cluster. This way, your ephemeral environments can use the same resource which makes their deployments faster and cheaper.
+*  Shared infrastructure resources such as virtual private network and subnet, also known as landing zones. 
+
+Serverless Framework provides a lot of capabilities out of the box to help you break up your app, manage and deploy
 your services. As your teams grow and the number of services grow, it can be difficult to know
 the best way to organize your services for scale.
 
