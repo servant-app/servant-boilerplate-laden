@@ -287,7 +287,7 @@ framework like Flask is routed from a single API Gateway endpoint, the
 request on API Gateway is captured as a proxy endpoint. As a result, the request
 may appear as `/{proxy+}` instead of the intended path. The Serverless SDK
 automatically instruments Flask to capture the correct endpoint. This enables
-you to filter for HTTP requests using the inteded path.
+you to filter for HTTP requests using the intended path.
 
 In some cases, it may be necessary to manually set the endpoint. In such cases
 you can use the `set_endpoint` method to customize the endpoint path.
