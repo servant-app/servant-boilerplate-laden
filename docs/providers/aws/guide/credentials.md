@@ -279,7 +279,7 @@ You can of course create as many of these accounts as you need, which is why it 
 
 ### Developer accounts
 
-When developing Serverless applications, often developers need to have the ability to deploy changes they have made to a service or to test out a new service. While providing development accounts is great, this may not be enough as there is a risk of overriding work d0ne by others or even causing disruptions to the team.
+When developing Serverless applications, often developers need to have the ability to deploy changes they have made to a service or to test out a new service. While providing development accounts is great, this may not be enough as there is a risk of overriding work done by others or even causing disruptions to the team.
 
 Using the methods described above, you can create individual AWS account per developer. This provides a good level of isolation, and can be easily managed through the Organizations service as team members are onboarded and offboarded.
 
